@@ -1,0 +1,71 @@
+#pragma once
+#include "Exceptions.h"
+#include <iostream>
+
+template<typename T>
+class DynamicArray {
+private:
+    T* data;
+    int size;
+    
+public:
+    DynamicArray() : data(nullptr), size(0) {}
+    
+    DynamicArray(int size) : size(size) {
+        if (size <= 0) throw std::invalid_argument("Size must be positive");
+        data = new T[size]();
+    }
+    
+    DynamicArray(T* items, int count) : size(count) {
+        if (count <= 0) throw std::invalid_argument("Count must be positive");
+        data = new T[count];
+        for (int i = 0; i < count; i++) {
+            data[i] = items[i];
+        }
+    }
+    
+    DynamicArray(const DynamicArray<T>& other) : size(other.size) {
+        data = new T[size];
+        for (int i = 0; i < size; i++) {
+            data[i] = other.data[i];
+        }
+    }
+    
+    ~DynamicArray() {
+        delete[] data;
+    }
+    
+    T Get(int index) const {
+        if (index < 0 || index >= size) throw IndexOutOfRangeException(index, size);
+        return data[index];
+    }
+    
+    void Set(int index, T value) {
+        if (index < 0 || index >= size) throw IndexOutOfRangeException(index, size);
+        data[index] = value;
+    }
+    
+    int GetSize() const { return size; }
+    
+    void Resize(int newSize) {
+        if (newSize <= 0) throw std::invalid_argument("New size must be positive");
+        T* newData = new T[newSize]();
+        int copySize = (newSize < size) ? newSize : size;
+        for (int i = 0; i < copySize; i++) {
+            newData[i] = data[i];
+        }
+        delete[] data;
+        data = newData;
+        size = newSize;
+    }
+    
+    T& operator[](int index) {
+        if (index < 0 || index >= size) throw IndexOutOfRangeException(index, size);
+        return data[index];
+    }
+    
+    const T& operator[](int index) const {
+        if (index < 0 || index >= size) throw IndexOutOfRangeException(index, size);
+        return data[index];
+    }
+};
