@@ -5,6 +5,7 @@
 #include <locale>
 #include <memory>
 #include <functional>
+#include <algorithm>
 #include <map>
 #include "ArraySequence.h"
 #include "ListSequence.h"
@@ -91,13 +92,13 @@ int GetValidSequenceId() {
 
 std::vector<int> ParseIntVector(const std::string& input) {
     std::vector<int> result;
-    std::stringstream ss(input);
+    std::string normalized = input;
+    std::replace(normalized.begin(), normalized.end(), ',', ' ');
+    std::stringstream ss(normalized);
     int value;
-    char comma;
     
     while (ss >> value) {
         result.push_back(value);
-        ss >> comma; // Skip comma if present
     }
     
     return result;
@@ -181,14 +182,14 @@ void CreateSequence() {
             std::getline(std::cin, input);
             
             if (input.empty()) {
-                // ImmutableListSequence not implemented; fall back to mutable ListSequence
-                std::cout << "\nWarning: ImmutableListSequence not implemented — creating mutable ListSequence instead." << std::endl;
-                sequences[id].seqInt = new ListSequence<int>();
+                // Empty immutable sequences are created via the default constructor.
+                std::cout << "\nCreated empty immutable list sequence." << std::endl;
+                sequences[id].seqInt = new ImmutableListSequence<int>();
             } else {
                 std::vector<int> values = ParseIntVector(input);
-                sequences[id].seqInt = new ListSequence<int>(values.data(), values.size());
+                sequences[id].seqInt = new ImmutableListSequence<int>(values.data(), values.size());
             }
-            sequences[id].type = SequenceType::LIST_MUTABLE;
+            sequences[id].type = SequenceType::LIST_IMMUTABLE;
         }
         else if (choice == 5) {
             sequences[id].seqBit = new BitSequence();
@@ -363,7 +364,7 @@ void InsertAtPosition() {
             }
         }
         
-        std::cout << "\n✅ Element inserted successfully!" << std::endl;
+            std::cout << "\nElement inserted successfully!" << std::endl;
     } catch (std::exception& ex) {
         std::cout << "\nError: " << ex.what() << std::endl;
     }
@@ -613,7 +614,7 @@ void ReduceOperation() {
         }
         
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 
@@ -627,7 +628,7 @@ void StatisticsOperation() {
         if (sequences[id].type == SequenceType::BIT) {
             int len = sequences[id].seqBit->GetLength();
             if (len == 0) {
-                std::cout << "\n📊 Statistics: sequence is empty." << std::endl;
+                std::cout << "\nStatistics: sequence is empty." << std::endl;
             } else {
                 int minV = 1, maxV = 0;
                 int sum = 0;
@@ -646,7 +647,7 @@ void StatisticsOperation() {
         } else {
             int len = sequences[id].seqInt->GetLength();
             if (len == 0) {
-                std::cout << "\n📊 Statistics: sequence is empty." << std::endl;
+                std::cout << "\nStatistics: sequence is empty." << std::endl;
             } else {
                 int minV = sequences[id].seqInt->Get(0);
                 int maxV = minV;
@@ -665,7 +666,7 @@ void StatisticsOperation() {
             }
         }
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 
@@ -676,7 +677,7 @@ void TryGetOperation() {
     if (id == -1) return;
     
     if (sequences[id].type == SequenceType::BIT) {
-        std::cout << "\n❌ This operation is only available for integer sequences (not BitSequence)!" << std::endl;
+        std::cout << "\nError: This operation is only available for integer sequences (not BitSequence)!" << std::endl;
         return;
     }
     
@@ -724,7 +725,7 @@ void TryGetOperation() {
         }
         
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 
@@ -784,7 +785,7 @@ void BitwiseOperation() {
             if (id2 == -1) return;
             
             if (sequences[id2].type != SequenceType::BIT) {
-                std::cout << "\n❌ Second sequence must also be BitSequence!" << std::endl;
+                std::cout << "\nError: Second sequence must also be BitSequence!" << std::endl;
                 return;
             }
             
@@ -814,14 +815,14 @@ void BitwiseOperation() {
                 sequences[newId].seqBit = result;
                 sequences[newId].type = SequenceType::BIT;
                 
-                std::cout << "\n✅ Saved as sequence ID: " << newId << std::endl;
+                std::cout << "\nSaved as sequence ID: " << newId << std::endl;
             } else {
                 delete result;
             }
         }
         
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 
@@ -856,7 +857,7 @@ void IteratorDemo() {
         std::cout << "]" << std::endl;
         
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 
@@ -896,10 +897,8 @@ void ConcatenateSequences() {
     }
     
     try {
-        if (sequences[id].type == SequenceType::BIT) {
-            std::cout << "\nError: This operation is only available for integer sequences (not BitSequence)!" << std::endl;
-                sequences[id1].seqBit->Append(sequences[id2].seqBit->Get(i));
-            }
+        if (sequences[id1].type == SequenceType::BIT) {
+            sequences[id1].seqBit->Concat(sequences[id2].seqBit);
         } else {
             Sequence<int>* result = sequences[id1].seqInt->Concat(sequences[id2].seqInt);
             
@@ -910,10 +909,10 @@ void ConcatenateSequences() {
             }
         }
         
-        std::cout << "\n✅ Sequences concatenated successfully!" << std::endl;
+        std::cout << "\nSequences concatenated successfully!" << std::endl;
         
     } catch (std::exception& ex) {
-        std::cout << "\n❌ Error: " << ex.what() << std::endl;
+        std::cout << "\nError: " << ex.what() << std::endl;
     }
 }
 

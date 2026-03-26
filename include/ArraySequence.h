@@ -244,8 +244,6 @@ public:
     
     Sequence<T>* Where(std::function<bool(T)> predicate) override {
         ImmutableArraySequence<T>* result = new ImmutableArraySequence<T>();
-        delete result->items;
-        result->items = new DynamicArray<T>(0);
         for (int i = 0; i < items->GetSize(); i++) {
             if (predicate(items->Get(i))) {
                 result->items->Resize(result->items->GetSize() + 1);

@@ -12,20 +12,20 @@ public:
     DynamicArray() : data(nullptr), size(0) {}
     
     DynamicArray(int size) : size(size) {
-        if (size <= 0) throw std::invalid_argument("Size must be positive");
-        data = new T[size]();
+        if (size < 0) throw std::invalid_argument("Size must be non-negative");
+        data = (size == 0) ? nullptr : new T[size]();
     }
     
     DynamicArray(T* items, int count) : size(count) {
-        if (count <= 0) throw std::invalid_argument("Count must be positive");
-        data = new T[count];
+        if (count < 0) throw std::invalid_argument("Count must be non-negative");
+        data = (count == 0) ? nullptr : new T[count];
         for (int i = 0; i < count; i++) {
             data[i] = items[i];
         }
     }
     
     DynamicArray(const DynamicArray<T>& other) : size(other.size) {
-        data = new T[size];
+        data = (size == 0) ? nullptr : new T[size];
         for (int i = 0; i < size; i++) {
             data[i] = other.data[i];
         }
@@ -48,8 +48,8 @@ public:
     int GetSize() const { return size; }
     
     void Resize(int newSize) {
-        if (newSize <= 0) throw std::invalid_argument("New size must be positive");
-        T* newData = new T[newSize]();
+        if (newSize < 0) throw std::invalid_argument("New size must be non-negative");
+        T* newData = (newSize == 0) ? nullptr : new T[newSize]();
         int copySize = (newSize < size) ? newSize : size;
         for (int i = 0; i < copySize; i++) {
             newData[i] = data[i];

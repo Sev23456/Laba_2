@@ -64,6 +64,15 @@ public:
         }
         return current->data;
     }
+
+    void Set(int index, T value) {
+        if (index < 0 || index >= length) throw IndexOutOfRangeException(index, length);
+        Node* current = head;
+        for (int i = 0; i < index; i++) {
+            current = current->next;
+        }
+        current->data = value;
+    }
     
     int GetLength() const { return length; }
     

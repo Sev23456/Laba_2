@@ -1,22 +1,8 @@
 #pragma once
+#include "Bit.h"
 #include "Sequence.h"
+#include <algorithm>
 #include <vector>
-
-class Bit {
-private:
-    bool value;
-public:
-    Bit(bool v = false) : value(v) {}
-    bool GetValue() const { return value; }
-    void SetValue(bool v) { value = v; }
-    
-    Bit operator&(const Bit& other) const { return Bit(value && other.value); }
-    Bit operator|(const Bit& other) const { return Bit(value || other.value); }
-    Bit operator^(const Bit& other) const { return Bit(value != other.value); }
-    Bit operator~() const { return Bit(!value); }
-    
-    operator bool() const { return value; }
-};
 
 class BitSequence : public Sequence<Bit> {
 private:
