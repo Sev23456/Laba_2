@@ -57,25 +57,25 @@ template <typename T> int ListSequence<T>::get_length() const {
 }
 
 template <typename T> Sequence<T> *ListSequence<T>::append(const T& item) {
-    ListSequence<T> *result = Instance();
+    ListSequence<T> *result = instance();
     result->append_to_current(item);
     return result;
 }
 
 template <typename T> Sequence<T> *ListSequence<T>::prepend(const T& item) {
-    ListSequence<T> *result = Instance();
+    ListSequence<T> *result = instance();
     result->items.prepend(item);
     return result;
 }
 
 template <typename T> Sequence<T> *ListSequence<T>::insert(const T& item, int index) {
-    ListSequence<T> *result = Instance();
+    ListSequence<T> *result = instance();
     result->items.insert(item, index);
     return result;
 }
 
 template <typename T> Sequence<T> *ListSequence<T>::remove(int index) {
-    ListSequence<T> *result = Instance();
+    ListSequence<T> *result = instance();
     result->items.remove(index);
     return result;
 }

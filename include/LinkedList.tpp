@@ -33,9 +33,9 @@ template <typename T> LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T
 
     Node *current = head;
     while (current != nullptr) {
-        Node *tmp = current;
+        Node *node_to_delete = current;
         current = current->next;
-        delete tmp;
+        delete node_to_delete;
     }
 
     head = nullptr;
@@ -161,9 +161,9 @@ template <typename T> LinkedList<T> LinkedList<T>::get_sublist(int start_index, 
 template <typename T> LinkedList<T>::~LinkedList() {
     Node *current = head;
     while (current != nullptr) {
-        Node *tmp = current;
+        Node *node_to_delete = current;
         current = current -> next;
-        delete tmp;
+        delete node_to_delete;
     }
 }
 
@@ -172,9 +172,9 @@ template <typename T> void LinkedList<T>::remove(int index) {
         throw std::out_of_range("Index out of range");
     }
     if (index == 0) {
-        Node *tmp = head;
+        Node *node_to_delete = head;
         head = head->next;
-        delete tmp;
+        delete node_to_delete;
         if (head == nullptr) {
             tail = nullptr;
         }
@@ -185,12 +185,12 @@ template <typename T> void LinkedList<T>::remove(int index) {
     for (int i = 0; i < index-1; i++) {
         current = current->next;
     }
-    Node *tmp = current->next;
-    current->next = tmp->next;
-    if (tmp == tail) {
+    Node *node_to_delete = current->next;
+    current->next = node_to_delete->next;
+    if (node_to_delete == tail) {
         tail = current;
     }
-    delete tmp;
+    delete node_to_delete;
     length--;
 }   
 
