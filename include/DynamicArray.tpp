@@ -90,13 +90,8 @@ template <typename T> void DynamicArray<T>::resize(int new_size) {
     T *replacement = nullptr;
     if (new_size > 0) {
         replacement = new T[new_size];
-        int will_copy; // Переделал время
-        if (new_size < size) {
-            will_copy = new_size;
-        } else {
-            will_copy = size;
-        }
-        for (int index = 0; index < will_copy; index++) {
+        int copy_count = new_size < size ? new_size : size;
+        for (int index = 0; index < copy_count; index++) {
             replacement[index] = data[index];
         }
     }
