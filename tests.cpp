@@ -76,7 +76,7 @@ void linked_list_get_sublist_invalid(LinkedList<int> &list) {
 void expect_sequence(Sequence<int> *sequence, const int *expected, int count, const std::string &name) {
     expect_eq(sequence->get_length(), count, name + " length");
     for (int i = 0; i < count; ++i) {
-        expect_eq(sequence->get(i), expected[i], name + " item " + std::to_string(i));
+        expect_eq(sequence->Get(i), expected[i], name + " item " + std::to_string(i));
     }
 }
 

@@ -5,9 +5,9 @@
 
 template <typename T> class Sequence {
     protected:
-        virtual Sequence<T> *instance() = 0;
-        virtual Sequence<T> *clone() const = 0;
-        virtual Sequence<T> *empty_clone() const = 0;
+        virtual Sequence<T> *Instance() = 0;
+        virtual Sequence<T> *Clone() const = 0;
+        virtual Sequence<T> *EmptyClone() const = 0;
         virtual void append_to_current(const T &item) = 0;
         virtual void reserve(int) {}
 

@@ -34,7 +34,7 @@ inline void print_sequence(const Sequence<int> &sequence) {
         if (index > 0) {
             std::cout << ", ";
         }
-        std::cout << sequence.get(index);
+        std::cout << sequence.Get(index);
     }
     std::cout << "]";
 }

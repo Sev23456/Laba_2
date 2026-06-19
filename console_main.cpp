@@ -20,7 +20,7 @@ void execute_command(Sequence<int> *&sequence, int &kind, int command, bool &run
             return;
         case 4: {
             int index = read_int("Index: ");
-            std::cout << "Value: " << sequence->get(index) << "\n";
+            std::cout << "Value: " << sequence->Get(index) << "\n";
             return;
         }
         case 5: {

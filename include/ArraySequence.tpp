@@ -60,13 +60,13 @@ template <typename T> int ArraySequence<T>::get_length() const {
 }
 
 template <typename T> Sequence<T> *ArraySequence<T>::append(const T& item) {
-    ArraySequence<T> *result = instance();
+    ArraySequence<T> *result = Instance();
     result->append_to_current(item);
     return result;
 }
 
 template <typename T> Sequence<T> *ArraySequence<T>::prepend(const T& item) {
-    ArraySequence<T> *result = instance();
+    ArraySequence<T> *result = Instance();
     const int old_length = result->count;
 
     result->reallocate(old_length + 1);
@@ -79,7 +79,7 @@ template <typename T> Sequence<T> *ArraySequence<T>::prepend(const T& item) {
 }
 
 template <typename T> Sequence<T> *ArraySequence<T>::insert(const T& item, int index) {
-    ArraySequence<T> *result = instance();
+    ArraySequence<T> *result = Instance();
     const int old_length = result->count;
     if (index < 0 || index > old_length) {
         throw std::out_of_range("Index out of range");
@@ -95,7 +95,7 @@ template <typename T> Sequence<T> *ArraySequence<T>::insert(const T& item, int i
 }
 
 template <typename T> Sequence<T> *ArraySequence<T>::remove(int index) {
-    ArraySequence<T> *result = instance();
+    ArraySequence<T> *result = Instance();
     const int old_length = result->count;
     if (index < 0 || index >= old_length) {
         throw std::out_of_range("Index out of range");

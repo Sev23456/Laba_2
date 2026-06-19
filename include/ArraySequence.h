@@ -10,9 +10,9 @@ template <typename T> class ArraySequence : public Sequence<T> {
         DynamicArray<T> items;
         int count;
 
-        virtual ArraySequence<T> *instance() override = 0;
-        virtual ArraySequence<T> *clone() const override = 0;
-        virtual ArraySequence<T> *empty_clone() const override = 0;
+        virtual ArraySequence<T> *Instance() override = 0;
+        virtual ArraySequence<T> *Clone() const override = 0;
+        virtual ArraySequence<T> *EmptyClone() const override = 0;
 
         void append_to_current(const T &item) override;
         void reserve(int capacity) override;
@@ -78,15 +78,15 @@ template <typename T> class ArraySequence : public Sequence<T> {
 
 template <typename T> class MutableArraySequence : public ArraySequence<T> {
     protected:
-        ArraySequence<T> *instance() override {
+        ArraySequence<T> *Instance() override {
             return this;
         }
 
-        ArraySequence<T> *clone() const override {
+        ArraySequence<T> *Clone() const override {
             return new MutableArraySequence<T>(*this);
         }
 
-        ArraySequence<T> *empty_clone() const override {
+        ArraySequence<T> *EmptyClone() const override {
             return new MutableArraySequence<T>();
         }
 
@@ -98,15 +98,15 @@ template <typename T> class MutableArraySequence : public ArraySequence<T> {
 
 template <typename T> class ImmutableArraySequence : public ArraySequence<T> {
     protected:
-        ArraySequence<T> *instance() override {
-            return clone();
+        ArraySequence<T> *Instance() override {
+            return Clone();
         }
 
-        ArraySequence<T> *clone() const override {
+        ArraySequence<T> *Clone() const override {
             return new ImmutableArraySequence<T>(*this);
         }
 
-        ArraySequence<T> *empty_clone() const override {
+        ArraySequence<T> *EmptyClone() const override {
             return new ImmutableArraySequence<T>();
         }
 

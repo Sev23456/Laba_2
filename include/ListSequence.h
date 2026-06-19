@@ -7,9 +7,9 @@ template <typename T> class ListSequence : public Sequence<T> {
     protected:
         LinkedList<T> items;
 
-        virtual ListSequence<T> *instance() override = 0;
-        virtual ListSequence<T> *clone() const override = 0;
-        virtual ListSequence<T> *empty_clone() const override = 0;
+        virtual ListSequence<T> *Instance() override = 0;
+        virtual ListSequence<T> *Clone() const override = 0;
+        virtual ListSequence<T> *EmptyClone() const override = 0;
 
         void append_to_current(const T &item) override;
 
@@ -74,15 +74,15 @@ template <typename T> class ListSequence : public Sequence<T> {
 
 template <typename T> class MutableListSequence : public ListSequence<T> {
     protected:
-        ListSequence<T> *instance() override {
+        ListSequence<T> *Instance() override {
             return this;
         }
 
-        ListSequence<T> *clone() const override {
+        ListSequence<T> *Clone() const override {
             return new MutableListSequence<T>(*this);
         }
 
-        ListSequence<T> *empty_clone() const override {
+        ListSequence<T> *EmptyClone() const override {
             return new MutableListSequence<T>();
         }
 
@@ -94,15 +94,15 @@ template <typename T> class MutableListSequence : public ListSequence<T> {
 
 template <typename T> class ImmutableListSequence : public ListSequence<T> {
     protected:
-        ListSequence<T> *instance() override {
-            return clone();
+        ListSequence<T> *Instance() override {
+            return Clone();
         }
 
-        ListSequence<T> *clone() const override {
+        ListSequence<T> *Clone() const override {
             return new ImmutableListSequence<T>(*this);
         }
 
-        ListSequence<T> *empty_clone() const override {
+        ListSequence<T> *EmptyClone() const override {
             return new ImmutableListSequence<T>();
         }
 
